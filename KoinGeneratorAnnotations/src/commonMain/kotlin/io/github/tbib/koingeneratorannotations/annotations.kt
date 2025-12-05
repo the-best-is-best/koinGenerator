@@ -39,6 +39,4 @@ annotation class Param(val name: String = "")
 // For Install targets (optional)
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
-annotation class InstallIn(val value: KoinInstallTarget)
-
-enum class KoinInstallTarget { Application, Activity, Fragment, Service, Custom }
+annotation class InstallIn()

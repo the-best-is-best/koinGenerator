@@ -1,15 +1,11 @@
 package io.github.tbib.koingeneratorapp
 
-import androidx.lifecycle.ViewModel
-import io.github.tbib.koingeneratorannotations.Factory
-import io.github.tbib.koingeneratorannotations.KoinViewModel
-import io.github.tbib.koingeneratorannotations.Module
-import io.github.tbib.koingeneratorannotations.Single
+import io.github.tbib.koingeneratorannotations.InstallIn
 import org.koin.core.module.Module as KoinModule
-
-
+import io.github.tbib.koingeneratorannotations.Module
 
 @Module
+@InstallIn()
 interface DI {
     val module: KoinModule
 }

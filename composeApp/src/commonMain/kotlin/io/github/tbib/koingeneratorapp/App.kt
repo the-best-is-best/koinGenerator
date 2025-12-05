@@ -13,25 +13,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import io.github.tbib.core.presenter.MyPresenter
+import io.github.tbib.koingeneratorapp.di.loadCoreDIModules
+import io.github.tbib.koingeneratorapp.view_model.MyViewModel
 import koingeneratorapp.composeapp.generated.resources.Res
 import koingeneratorapp.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 
 fun initKoin() {
     startKoin {
-        modules(DI().module)
+        modules(loadCoreDIModules() + loadDIModules())
     }
 }
 
 
-// Helper class to get injections
-class AppKoinComponent : KoinComponent {
-    val presenter: MyPresenter by inject()
-}
+
 
 @Composable
 @Preview
@@ -41,7 +42,7 @@ fun App() {
 
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
-        val appComponent = remember { AppKoinComponent() }
+        val viewModel = koinViewModel<MyViewModel>()
 
         Column(
             modifier = Modifier
@@ -54,7 +55,7 @@ fun App() {
                 Text("Click me!")
             }
             AnimatedVisibility(showContent) {
-                val greeting = remember { appComponent.presenter.getGreeting() }
+                val greeting = remember { viewModel.getGreeting() }
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,

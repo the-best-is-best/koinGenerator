@@ -4,6 +4,8 @@ plugins {
 
 }
 extra["packageNameSpace"] = "io.github.tbib.koingeneratorannotations"
+extra["artifactId"] = "automapper-annotations"
+extra["packageName"] = "Automapper Annotations"
 
 
 
@@ -11,7 +13,7 @@ extra["packageNameSpace"] = "io.github.tbib.koingeneratorannotations"
 kotlin {
     androidTarget()
 
-    val xcfName = "KtorGeneratorAnnotationsKit"
+    val xcfName = "KoinGeneratorAnnotationsKit"
 
     listOf(
         iosX64(),

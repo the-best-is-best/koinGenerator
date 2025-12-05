@@ -47,7 +47,7 @@ kotlin {
 
             implementation(project.dependencies.platform("io.insert-koin:koin-bom:4.1.1"))
             implementation("io.insert-koin:koin-compose")
-                api("io.insert-koin:koin-compose-viewmodel")
+            implementation("io.insert-koin:koin-androidx-compose")
 
         }
         commonTest.dependencies {
