@@ -10,5 +10,10 @@ plugins {
     alias(libs.plugins.androidLint) apply false
     alias(libs.plugins.jetbrainsKotlinJvm) apply false
     alias(libs.plugins.comGoogleDevToolsKsp) apply false
+    alias(libs.plugins.mavenPublish) apply false
 
+}
+
+subprojects {
+    apply(from = "${rootProject.projectDir}/gradle/publish-config.gradle.kts")
 }
