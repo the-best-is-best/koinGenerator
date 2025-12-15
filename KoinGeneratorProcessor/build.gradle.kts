@@ -25,6 +25,52 @@ extra["packageNameSpace"] = "io.github.tbib.koingeneratorprocessor"
 extra["artifactId"] = "koingenerator-processor"
 extra["packageName"] = "Koingenerator Processor"
 
+mavenPublishing {
+    coordinates(
+        extra["groupId"].toString(),
+        extra["artifactId"].toString(),
+        extra["version"].toString()
+    )
+
+    publishToMavenCentral()
+    signAllPublications()
+
+    pom {
+        name.set(extra["packageName"].toString())
+        description.set(extra["packageDescription"].toString())
+        url.set(extra["packageUrl"].toString())
+        licenses {
+            license {
+                name.set("Apache-2.0")
+                url.set("https://opensource.org/licenses/Apache-2.0")
+            }
+        }
+        issueManagement {
+            system.set(extra["system"].toString())
+            url.set(extra["issueUrl"].toString())
+        }
+        scm {
+            connection.set(extra["connectionGit"].toString())
+            url.set(extra["packageUrl"].toString())
+        }
+        developers {
+            developer {
+                id.set(extra["developerNameId"].toString())
+                name.set(extra["developerName"].toString())
+                email.set(extra["developerEmail"].toString())
+            }
+        }
+    }
+
+}
+
+
+signing {
+    useGpgCmd()
+    sign(publishing.publications)
+}
+
+
 
 kotlin {
     jvm()

@@ -35,7 +35,7 @@ mavenPublishing {
         extra["version"].toString()
     )
 
-    publishToMavenCentral(true)
+    publishToMavenCentral()
     signAllPublications()
 
     pom {
