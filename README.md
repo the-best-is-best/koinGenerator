@@ -45,10 +45,10 @@ In your `build.gradle.kts` file for your shared module (e.g., `core`, `shared`):
 
 ```kotlin
 // Add the annotations library
-implementation("io.github.tbib:koingenerator-annotations:x.y.z")
+implementation("io.github.the-best-is-best:koingenerator-annotations:x.y.z")
 
 // Add the KSP processor
-ksp("io.github.tbib:koingenerator-processor:x.y.z")
+ksp("io.github.the-best-is-best:koingenerator-processor:x.y.z")
 ```
 
 ## 2. Configure KSP
