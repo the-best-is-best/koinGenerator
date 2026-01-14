@@ -1,5 +1,5 @@
 extra["groupId"] = "io.github.the-best-is-best"
-extra["version"] = "1.0.0"
+extra["version"] = "1.0.1"
 extra["packageUrl"] = "https://github.com/the-best-is-best/koinGenerator"
 extra["issueUrl"] = "https://github.com/the-best-is-best/koinGenerator/issues"
 extra["connectionGit"] = "https://github.com/the-best-is-best/koinGenerator.git"
