@@ -2,7 +2,7 @@ import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurr
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.mavenPublish)
     id("maven-publish")
     id("signing")
@@ -77,7 +77,6 @@ signing {
 
 
 kotlin {
-    androidTarget()
 
     val xcfName = "KoinGeneratorAnnotationsKit"
 
@@ -121,12 +120,7 @@ kotlin {
         // Minimal Android configuration needed for a library
         namespace = project.extra["packageNameSpace"].toString()
         compileSdk = 36
-        defaultConfig {
-            minSdk = 24
-        }
-        compileOptions {
-            // You don't need to specify source/target compatibility for a KMP library
-        }
+        minSdk = 23
     }
 
     // Source set declarations.

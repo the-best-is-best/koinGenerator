@@ -14,7 +14,7 @@ kotlin {
     androidLibrary {
         namespace = "io.github.tbib.core"
         compileSdk = 36
-        minSdk = 24
+        minSdk = 23
 
         withHostTestBuilder {
         }

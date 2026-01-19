@@ -28,7 +28,8 @@ dependencyResolutionManagement {
     }
 }
 
-include(":composeApp")
+include(":sharedUI")
 include(":KoinGeneratorAnnotations")
 include(":KoinGeneratorProcessor")
 include(":core")
+include("androidSimple")
