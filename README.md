@@ -35,6 +35,17 @@ It includes:
   </a>
 </p>
 
+## 🛠️ Important: Initial Build Step
+
+Because this library relies on KSP to generate code, you must manually trigger the metadata
+generation the first time you set up the project or after adding new annotations. Run the following
+commands in your terminal:
+
+```kotlin
+./gradlew core : kspCommonMainKotlinMetadata --no - configuration - cache
+    ./ gradlew sharedUI:kspCommonMainKotlinMetadata-- no -configuration - cache
+```
+
 # 📦 Installation
 
 **_Note: Please replace `x.y.z` with the latest version._**
