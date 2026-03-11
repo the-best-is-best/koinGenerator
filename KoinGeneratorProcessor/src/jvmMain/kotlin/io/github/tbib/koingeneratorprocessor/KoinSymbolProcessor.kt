@@ -1,10 +1,28 @@
 package io.github.tbib.koingeneratorprocessor
 
-import com.google.devtools.ksp.processing.*
-import com.google.devtools.ksp.symbol.*
+import com.google.devtools.ksp.processing.Dependencies
+import com.google.devtools.ksp.processing.KSPLogger
+import com.google.devtools.ksp.processing.Resolver
+import com.google.devtools.ksp.processing.SymbolProcessor
+import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
+import com.google.devtools.ksp.symbol.ClassKind
+import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSFunctionDeclaration
+import com.google.devtools.ksp.symbol.KSType
+import com.google.devtools.ksp.symbol.KSValueParameter
 import com.google.devtools.ksp.validate
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.LIST
+import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.joinToCode
 import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
@@ -16,6 +34,9 @@ class KoinSymbolProcessor(private val env: SymbolProcessorEnvironment) : SymbolP
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val packageNames = env.options["packageName"]?.split(',')?.map { it.trim() }?.filter { it.isNotBlank() }
+        val visibilityOption = env.options["koinGeneratorVisible"]?.lowercase() ?: "public"
+        val visibilityModifier =
+            if (visibilityOption == "public") KModifier.PUBLIC else KModifier.INTERNAL
 
         val allModuleSymbols = resolver.getSymbolsWithAnnotation(Module::class.qualifiedName!!)
             .filterIsInstance<KSClassDeclaration>()
@@ -36,16 +57,19 @@ class KoinSymbolProcessor(private val env: SymbolProcessorEnvironment) : SymbolP
 
         val (valid, invalid) = moduleInterfaces.toList().partition { it.validate() }
 
-        valid.forEach { generateModuleImplementation(it, resolver) }
+        valid.forEach { generateModuleImplementation(it, resolver, visibilityModifier) }
 
         if (valid.isNotEmpty()) {
-            generateModuleLoader(valid)
+            generateModuleLoader(valid, visibilityModifier)
         }
 
         return invalid
     }
 
-    private fun generateModuleLoader(modules: List<KSClassDeclaration>) {
+    private fun generateModuleLoader(
+        modules: List<KSClassDeclaration>,
+        visibility: KModifier
+    ) {
         val loaderPackageName = env.options["koinLoaderPackageName"] ?: modules.first().packageName.asString()
         val loaderFileName = "KoinModuleLoader"
 
@@ -85,6 +109,7 @@ class KoinSymbolProcessor(private val env: SymbolProcessorEnvironment) : SymbolP
 
             if (moduleCalls.toString().isNotBlank()) {
                 val funSpec = FunSpec.builder(functionName)
+                    .addModifiers(visibility)
                     .returns(LIST.parameterizedBy(ClassName("org.koin.core.module", "Module")))
                     .addStatement("return listOf(\n%L\n)", moduleCalls)
                     .build()
@@ -100,6 +125,7 @@ class KoinSymbolProcessor(private val env: SymbolProcessorEnvironment) : SymbolP
             val moduleCall = CodeBlock.of("%N().module", interfaceName.simpleName)
 
             val funSpec = FunSpec.builder(functionName)
+                .addModifiers(visibility)
                 .returns(LIST.parameterizedBy(ClassName("org.koin.core.module", "Module")))
                 .addStatement("return listOf(%L)", moduleCall)
                 .build()
@@ -111,7 +137,11 @@ class KoinSymbolProcessor(private val env: SymbolProcessorEnvironment) : SymbolP
     }
 
 
-    private fun generateModuleImplementation(moduleInterface: KSClassDeclaration, resolver: Resolver) {
+    private fun generateModuleImplementation(
+        moduleInterface: KSClassDeclaration,
+        resolver: Resolver,
+        visibility: KModifier
+    ) {
         val interfaceName = moduleInterface.toClassName()
         val generatedClassName = "Generated${interfaceName.simpleName}"
         val packageName = interfaceName.packageName
@@ -164,6 +194,7 @@ class KoinSymbolProcessor(private val env: SymbolProcessorEnvironment) : SymbolP
             .build()
 
         val factoryFunction = FunSpec.builder(interfaceName.simpleName)
+            .addModifiers(visibility)
             .returns(interfaceName)
             .addStatement("return %T()", ClassName(packageName, generatedClassName))
             .build()

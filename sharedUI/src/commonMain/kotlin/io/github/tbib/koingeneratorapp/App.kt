@@ -18,16 +18,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.github.tbib.core.di.loadCoreDIModules
+import io.github.tbib.core.di.initKoin
 import io.github.tbib.koingeneratorapp.myiconpack.`Compose-multiplatform`
 import io.github.tbib.koingeneratorapp.view_model.MyViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.context.startKoin
 
 fun initKoin() {
-    startKoin {
-        modules(loadCoreDIModules() + loadDIModules())
-    }
+    initKoin()
 }
 
 

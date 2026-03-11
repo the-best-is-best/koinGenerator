@@ -11,7 +11,7 @@ kotlin {
     // Target declarations - add or remove as needed below. These define
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
-    androidLibrary {
+    android {
         namespace = "io.github.tbib.core"
         compileSdk = 36
         minSdk = 23
@@ -35,11 +35,6 @@ kotlin {
     // https://developer.android.com/kotlin/multiplatform/migrate
     val xcfName = "coreKit"
 
-    iosX64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
 
     iosArm64 {
         binaries.framework {
@@ -105,12 +100,23 @@ kotlin {
 
 }
 
+
 ksp {
+//    arg("koinGeneratorVisible", "public")
 }
 
+
+
+
 dependencies {
+    add("kspAndroid", projects.koinGeneratorProcessor)
 
-    add("kspCommonMainMetadata", projects.koinGeneratorProcessor)
-
-
+    // Target iOS (Assuming you use kspIosX64, kspIosArm64, etc.)
+    add("kspIosArm64", projects.koinGeneratorProcessor)
+    add("kspIosSimulatorArm64", projects.koinGeneratorProcessor)
+}
+project.tasks.configureEach {
+    if (name.startsWith("ksp") && name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
 }

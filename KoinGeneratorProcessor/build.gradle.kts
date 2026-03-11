@@ -71,7 +71,6 @@ signing {
 }
 
 
-
 kotlin {
     jvm()
 
@@ -87,6 +86,11 @@ kotlin {
             api(projects.koinGeneratorAnnotations)
 
 
+        }
+
+        commonMain.configure {
+            // إضافة مسار الكود المولد للـ Common عشان تشوف الدوال
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }
     }
 }

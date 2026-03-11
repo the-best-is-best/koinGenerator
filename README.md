@@ -76,6 +76,9 @@ ksp {
     // Optional: The package where the generated 'KoinModuleLoader.kt' file will be created.
     // Defaults to the package of the first module found.
     arg("koinLoaderPackageName", "io.github.tbib.koingeneratorapp.di")
+
+  // Options: "public" or "internal". Defaults to "public".
+  arg("koinGeneratorVisible", "public")
 }
 ```
 
